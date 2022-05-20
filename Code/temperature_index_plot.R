@@ -30,5 +30,5 @@ read.csv("Data/GLB.Ts+dSST.csv", skip=1, na = "***") %>%
     legend.key.height = unit(10, "pt"),
     legend.margin = margin(0,0,0,0))
 
-ggsave("Figures/temperature_index_plot.png", width = 6, height = 4)
+ggsave("Figures/temperature_index_plot.pdf", width = 6, height = 4)
   
