@@ -1,5 +1,6 @@
 library(tidyverse)
 library(glue)
+library(scales)
 
 t_data <- read.csv("Data/GLB.Ts+dSST.csv", skip = 1, na = "***") %>%
   select(year = Year, t_diff = 'J.D') %>%
