@@ -19,38 +19,71 @@ next_jan <- t_diff %>%
 t_data <- bind_rows(t_diff, next_jan) %>%
   mutate(month = factor(month,
                         levels = c(month.abb, "next_Jan")),
-         month_number = as.numeric(month) -1) 
+         month_number = as.numeric(month)) 
 
-# annotation <- t_data %>% 
-#   slice_max(year) %>% 
-#   slice_max(month_number)
+annotation <- t_data %>%
+  slice_max(year) %>%
+  slice_max(month_number)
+
+maxyear <- t_diff %>% 
+  slice_max(year) 
+
+temp_lines <- tibble(
+  top = 12,
+  temps = c(1.5, 2.0),
+  labels = c("1.5\u00B0C", "2.0\u00B0C")
+)
+
+month_labels <- tibble(
+  m = 1:12,
+  month_loc = 2.8,
+  labels = month.abb,
+)
 
 t_data %>% 
   ggplot(aes(x=month_number, y=t_diff, group=year, color=year)) +
-  geom_hline(yintercept = 0, color="white") +
+  geom_col(data = month_labels, aes(x=m +0.5, y=2.4), fill = "black",
+           width = 1,
+           inherit.aes = FALSE) +
+  geom_col(data = month_labels, aes(x=m +0.5, y=-2), fill = "black",
+           width = 1,
+           inherit.aes = FALSE) +
+  geom_hline(yintercept = c(1.5, 2.0), color="red") +
   geom_line() +
-  scale_x_continuous(breaks = 1:12,
+  geom_point(data = annotation, aes(x=month_number, y=t_diff, color=year),
+             size = 2,
+             inherit.aes = FALSE) +
+  geom_label(data = temp_lines, aes(x=top, y=temps, label=labels),
+             color = "red", fill = "black", label.size = 0,
+             inherit.aes = FALSE) +
+  geom_text(data = month_labels, aes(x=m, y=month_loc, label=labels),
+            inherit.aes = FALSE, color = "lightgrey",
+            angle = seq(360 - 360/12, 0, length.out = 12)) +
+  geom_text(data =  maxyear, aes(x = 1, y = -1.33, label = year), size = 4) +
+  scale_x_continuous(breaks = 1:12, expand = c(0,0),
                      labels=month.abb,
                      sec.axis = dup_axis(name = NULL, labels = NULL)) +
-  scale_y_continuous(breaks = seq(-2, 2, 0.2),
+  scale_y_continuous(breaks = seq(-2, 2, 0.2), expand = c(0,-0.7),
+                     limits = c(-2, 2.8),
                      sec.axis = dup_axis(name = NULL, labels = NULL)) +
   scale_color_viridis_c(breaks = seq(1880, 2020, 20),
                         guide = "none") +
   # coord_cartesian(xlim = c(1,12)) +
-  coord_polar() +
+  coord_polar(start = 2*pi/12) +
   labs(x = NULL, 
        y = NULL,
        title = glue("Global temperature change {min(t_data$year)+1}-{max(t_data$year)}")) +
   theme(
-    panel.background = element_rect(fill = "black", color = "white", size = 1),
-    plot.background = element_rect(fill = "#444444"),
+    panel.background = element_rect(fill = "#444444", size = 1),
+    plot.background = element_rect(fill = "#444444", color = "#444444"),
     panel.grid = element_blank(),
-    axis.text = element_text(color = "white", size = 13),
+    axis.text.x = element_blank(),
     axis.text.y = element_blank(),
-    # axis.ticks = element_line(color = "white"),
-    # axis.ticks.length = unit(-5, "pt"),
+    axis.ticks = element_blank(),
     axis.title = element_blank(),
     plot.title = element_text(color = "white", hjust = 0.5, size = 15),
   )
 
 ggsave("Figures/climate_spiral.pdf", width = 8, height = 4.5)
+
+
