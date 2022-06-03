@@ -20,7 +20,7 @@ t_data <- bind_rows(last_dec, t_diff, next_jan) %>%
   mutate(month = factor(month,
                         levels = c("last_Dec", month.abb, "next_Jan")),
          month_number = as.numeric(month) -1,
-         this_year = year == 2022) 
+         this_year = year == year(today())) 
 
 annotation <- t_data %>% 
   slice_max(year) %>% 
