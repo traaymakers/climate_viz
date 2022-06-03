@@ -2,6 +2,7 @@ library(tidyverse)
 
 read.csv("Data/GLB.Ts+dSST.csv", skip=1, na = "***") %>%
   select(year = Year, t_diff = 'J.D') %>%
+  drop_na() %>% 
   ggplot(aes(x=year, y=t_diff)) +
   geom_line(aes(color = "1"), size=0.5, show.legend = FALSE) +
   geom_point(fill="white", aes(color = "1"), shape = 21, show.legend = TRUE) +
@@ -15,7 +16,7 @@ read.csv("Data/GLB.Ts+dSST.csv", skip=1, na = "***") %>%
                      guide = guide_legend(override.aes = list(shape=15, size = 5))) +
   labs(
     x = "YEAR",
-    y = "Temperature anomaly (C)",
+    y = "Temperature anomaly (\u00B0C)",
     title = "GLOBAL LAND-OCEAN TEMPERATURE INDEX",
     subtitle = "Data source: NASA's Goddard Institute for Space Studies (GISS). \nCredit: NASA/GISS" 
   ) +

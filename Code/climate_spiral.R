@@ -85,5 +85,6 @@ t_data %>%
   )
 
 ggsave("Figures/climate_spiral.pdf", width = 8, height = 4.5)
+ggsave("Figures/climate_spiral.png", width = 8, height = 4.5)
 
 
