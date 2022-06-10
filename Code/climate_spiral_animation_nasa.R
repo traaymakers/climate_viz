@@ -83,17 +83,20 @@ g <- t_data %>%
     axis.ticks = element_blank(),
     axis.title = element_blank(),
     plot.title = element_text(color = "white", hjust = 0.5, size = 15),
-  ) +
-  transition_manual(frames = year, cumulative = TRUE)
+  ) #+
+#  transition_manual(frames = year, cumulative = TRUE)
 
-animate(g, width = 4.155, height = 4.5, unit = "in", res = 300,
-        # nframes = nrow(t_data),
-        # fps = nrow(t_data)/12/60/60
-        )
-anim_save("Figures/climate_spiral.gif")
-
-animate(g, width = 4.155, height = 4.5, unit = "in", res = 300,
-        renderer = av_renderer("Figures/climate_spiral.mp4"))
+ggsave("Figures/climate_spiral_nasa.pdf", width = 4.155, height = 4.5, unit = "in")
+ggsave("Figures/climate_spiral_nasa.png", width = 4.155, height = 4.5, unit = "in")
+       
+# animate(g, width = 4.155, height = 4.5, unit = "in", res = 300,
+#         # nframes = nrow(t_data),
+#         # fps = nrow(t_data)/12/60/60
+#         )
+# anim_save("Figures/climate_spiral.gif")
+# 
+# animate(g, width = 4.155, height = 4.5, unit = "in", res = 300,
+#         renderer = av_renderer("Figures/climate_spiral.mp4"))
 
 
 
