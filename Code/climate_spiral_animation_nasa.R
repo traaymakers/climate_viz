@@ -34,69 +34,75 @@ annotation <- t_data %>%
 #   slice_max(year) 
 
 temp_lines <- tibble(
-  top = 12,
-  temps = c(1.5, 2.0),
-  labels = c("1.5\u00B0C", "2.0\u00B0C")
+  top = 1,
+  temps = c(1.0, 0, -1.0),
+  labels = c("+1\u00B0 C", "0\u00B0 C", "-1\u00B0 C")
 )
 
 month_labels <- tibble(
   m = 1:12,
-  month_loc = 2.8,
-  labels = month.abb,
+  month_loc = 1.5,
+  labels = toupper(month.abb),
+)
+
+gridlines <- tibble(
+  x = c(1.2, 1.3, 1.6),
+  xend = c(12.8, 12.7, 12.4),
+  y = c(1, 0, -1),
+  yend = y
 )
 
 g <- t_data %>% 
-  ggplot(aes(x=month_number, y=t_diff, group=year, color=year)) +
-  geom_rect(aes(xmin = 1, xmax = 13, ymin = -2, ymax = 2.4),
-            color = "black", fill = "black",
-            inherit.aes = FALSE) +
-  geom_hline(yintercept = c(1.5, 2.0), color="red") +
-  geom_label(data = temp_lines, aes(x=top, y=temps, label=labels),
-             color = "red", fill = "black", label.size = 0,
-             inherit.aes = FALSE) +
-  geom_text(data = month_labels, aes(x=m, y=month_loc, label=labels),
-            inherit.aes = FALSE, color = "lightgrey",
-            angle = seq(360 - 360/12, 0, length.out = 12)) +
-  geom_label(aes(x = 1, y = -1.33, label = year),
-             color = "white", fill = "black",
-             label.padding = unit(50, "pt"),
+  ggplot(aes(x=month_number, y=t_diff, group=year, color=t_diff)) +
+  # geom_rect(aes(xmin = 1, xmax = 13, ymin = -2, ymax = 2.4),
+  #           color = "black", fill = "black",
+  #           inherit.aes = FALSE) +
+  geom_label(aes(x = 1, y = -1.7, label = year),
+             fill = "black",
              label.size = 0, size = 6) +
   geom_line() +
-  scale_x_continuous(breaks = 1:12, expand = c(0,0),
-                     labels=month.abb,
-                     sec.axis = dup_axis(name = NULL, labels = NULL)) +
-  scale_y_continuous(breaks = seq(-2, 2, 0.2), expand = c(0,-0.7),
-                     limits = c(-2, 2.8),
-                     sec.axis = dup_axis(name = NULL, labels = NULL)) +
-  scale_color_viridis_c(breaks = seq(1880, 2020, 20),
+  geom_segment(data = gridlines, aes(x=x, y=y, xend=xend, yend=yend),
+               color=c("yellow", "green", "yellow"),
+               inherit.aes = FALSE) +
+  geom_text(data = temp_lines, aes(x=top, y=temps, label=labels),
+             color = c("yellow", "green", "yellow"), size = 2, fontface = "bold", 
+             inherit.aes = FALSE) +
+  geom_text(data = month_labels, aes(x=m, y=month_loc, label=labels),
+            inherit.aes = FALSE, color = "yellow"#,
+            #angle = seq(360 - 360/12, 0, length.out = 12)
+  ) +
+  # scale_x_continuous(breaks = 1:12, expand = c(0,0),
+  #                    labels=month.abb,
+  #                    sec.axis = dup_axis(name = NULL, labels = NULL)) +
+  scale_y_continuous(limits = c(-2.0, 1.5),
+                     expand = c(0,-0.3)
+                     ) +
+  scale_color_gradient2(low = "blue", high = "red", mid = "white", midpoint = 0,
                         guide = "none") +
-  coord_polar(start = 2*pi/12) +
+  coord_polar(start = 0) +
   labs(x = NULL, 
        y = NULL,
-       title = glue("Global temperature change {min(t_data$year)}-{max(t_data$year)}")) +
+       title = NULL) +
   theme(
-    panel.background = element_rect(fill = "#444444", size = 1),
-    plot.background = element_rect(fill = "#444444", color = "#444444"),
+    panel.background = element_rect(fill = "black"),
+    plot.background = element_rect(fill = "black", color = "black"),
     panel.grid = element_blank(),
     axis.text.x = element_blank(),
     axis.text.y = element_blank(),
     axis.ticks = element_blank(),
     axis.title = element_blank(),
-    plot.title = element_text(color = "white", hjust = 0.5, size = 15),
-  ) #+
-#  transition_manual(frames = year, cumulative = TRUE)
-
-ggsave("Figures/climate_spiral_nasa.pdf", width = 4.155, height = 4.5, unit = "in")
-ggsave("Figures/climate_spiral_nasa.png", width = 4.155, height = 4.5, unit = "in")
-       
-# animate(g, width = 4.155, height = 4.5, unit = "in", res = 300,
-#         # nframes = nrow(t_data),
-#         # fps = nrow(t_data)/12/60/60
-#         )
-# anim_save("Figures/climate_spiral.gif")
+    plot.title = element_blank(),
+  ) +
+ transition_manual(frames = year, cumulative = TRUE)
 # 
-# animate(g, width = 4.155, height = 4.5, unit = "in", res = 300,
-#         renderer = av_renderer("Figures/climate_spiral.mp4"))
+# ggsave("Figures/climate_spiral_nasa.pdf", width = 4.155, height = 4.5, unit = "in", dpi = 300)
+# ggsave("Figures/climate_spiral_nasa.png", width = 4.155, height = 4.5, unit = "in", dpi = 300)
+       
+animate(g, width = 4.155, height = 4.5, unit = "in", res = 300)
+anim_save("Figures/climate_spiral_nasa.gif")
+
+animate(g, width = 4.155, height = 4.5, unit = "in", res = 300,
+        renderer = av_renderer("Figures/climate_spiral_nasa.mp4"))
 
 
 
