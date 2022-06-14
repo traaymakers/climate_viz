@@ -32,6 +32,7 @@ totals$number <- movie_number$count
 cum_number <- cumsum(totals$number)
 totals$cummovies <- cum_number
   
+
 p1 <- ggplot(data = totals, aes(x = year, y = hours)) +
   geom_line(aes(color = "1"), size = 0.5, show.legend = FALSE) +
   geom_point(fill="white", aes(color = "1"), shape = 21, show.legend = TRUE) +
@@ -45,7 +46,7 @@ p1 <- ggplot(data = totals, aes(x = year, y = hours)) +
                      labels=c("Hours per release year", "LOWESS smoothing"), 
                      guide = guide_legend(override.aes = list(shape=15, size = 2))) +
   labs(x = "Release year",
-       y = "Hours per release year",
+       y = "Time (hours)",
        title = "Watch time per release year") +
   theme_light() +
   theme(axis.ticks = element_blank(),
@@ -95,8 +96,8 @@ p3 <- ggplot(data = totals, aes(x = year, y = number)) +
                      values = c("black", "green"),
                      labels=c("Movies per release year", "LOWESS smoothing"),
                      guide = guide_legend(override.aes = list(shape=15, size = 2))) +
-  labs(x = "Release year",
-       y = "Movies per release year",
+  labs(x = NULL,
+       y = "# of movies",
        title = "Movies per release year") +
   theme_light() +
   theme(axis.ticks = element_blank(),
@@ -120,7 +121,7 @@ p4 <- ggplot(data = totals, aes(x = year, y = cummovies)) +
                      values = c("orange", "blue"),
                      labels=c(" Cumulative number of movies", "LOWESS smoothing"),
                      guide = guide_legend(override.aes = list(shape=15, size = 2))) +
-  labs(x = "Release year",
+  labs(x = NULL,
        y = NULL,
        title = "Cumulative movies") +
   theme_light() +
@@ -135,8 +136,8 @@ p4 <- ggplot(data = totals, aes(x = year, y = cummovies)) +
 
 p3 + p4 + p1 + p2
 
-ggsave("Figures/20220613_movie_stats_temp.pdf", width = 8, height = 5)
-ggsave("Figures/20220613_movie_stats_temp.png", width = 8, height = 5)
+ggsave("Figures/20220613_movie_stats2.pdf", width = 8, height = 5)
+ggsave("Figures/20220613_movie_stats2.png", width = 8, height = 5)
 
   
 
