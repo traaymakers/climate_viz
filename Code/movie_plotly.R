@@ -37,7 +37,7 @@ totals$cummovies <- cum_number
 
 
 fig <- plot_ly(totals, x = ~year)
-fig <- fig %>% add_lines(y = ~hours, name = "Hours")
+fig <- fig %>% add_lines(y = ~number, name = "Number of moveis")
 # fig <- fig %>% add_lines(y = ~MSFT.Adjusted, name = "Microsoft")
 fig <- fig %>% layout(
   title = "Movie watchlist",
@@ -68,7 +68,7 @@ fig <- fig %>% layout(
     
     rangeslider = list(type = "date")),
   
-  yaxis = list(title = "Hours per release year"))
+  yaxis = list(title = "# movies per release year"))
 
 fig
 
