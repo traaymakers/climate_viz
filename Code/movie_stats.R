@@ -136,8 +136,8 @@ p4 <- ggplot(data = totals, aes(x = year, y = cummovies)) +
 
 p3 + p4 + p1 + p2
 
-ggsave("Figures/20221102_movie_stats.pdf", width = 8, height = 5)
-ggsave("Figures/20221102_movie_stats.png", width = 8, height = 5)
+ggsave("Figures/20221114_movie_stats.pdf", width = 8, height = 5)
+ggsave("Figures/20221114_movie_stats.png", width = 8, height = 5)
 
   
 

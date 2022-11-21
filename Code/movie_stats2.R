@@ -16,7 +16,7 @@ overview <- aggregate(cbind(count = id) ~ year_added,
                           FUN = function(x){NROW(x)})
 
 
-filter(year_added <= 2013)  
+filter(watchlist2$year_added <= 2013)  
 # 
 # hours <- totals$per_year/60
 # totals$hours <- hours
